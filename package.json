@@ -1,20 +1,20 @@
 {
   "name": "elliptical-soa",
   "description": "Elliptical Service Oriented Architecture",
-  "version": "1.0.9",
+  "version": "1.0.10",
   "author": "S. Francis",
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/tachyon1337/elliptical-soa.git"
+    "url": "https://github.com/ellipticaljs/soa.git"
   },
   "dependencies": {
-    "elliptical-utils": "git+https://github.com/tachyon1337/elliptical-utils.git",
-    "elliptical-class": "git+https://github.com/tachyon1337/elliptical-class.git",
-    "elliptical-lodash": "git+https://github.com/tachyon1337/elliptical-lodash.git",
-    "elliptical-http": "git+https://github.com/tachyon1337/elliptical-http.git",
-    "dustjs": "git+https://github.com/tachyon1337/dustjs.git",
-    "elliptical-dust-helpers": "git+https://github.com/tachyon1337/elliptical-dust-helpers.git",
+    "elliptical-utils": "git+https://github.com/ellipticaljs/utils.git",
+    "elliptical-class": "git+https://github.com/ellipticaljs/class.git",
+    "elliptical-lodash": "git+https://github.com/ellipticaljs/lodash.git",
+    "elliptical-http": "git+https://github.com/ellipticaljs/http.git",
+    "dustjs": "git+https://github.com/ellipticaljs/dustjs.git",
+    "elliptical-dust-helpers": "git+https://github.com/ellipticaljs/dust-helpers.git",
     "async": "^1.5.0"
   },
   "devDependencies": {

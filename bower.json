@@ -1,7 +1,7 @@
 {
   "name": "elliptical-soa",
   "description": "Elliptical Service Oriented Architecture",
-  "version": "1.0.9",
+  "version": "1.0.10",
   "main": "dist/elliptical.soa.js",
   "authors": [
     "S. Francis"
@@ -13,14 +13,34 @@
     "oriented",
     "architecture"
   ],
-  "homepage": "https://github.com/tachyon1337/elliptical-soa",
+  "homepage": "https://github.com/ellipticaljs/soa",
   "moduleType": [],
   "ignore": [
     "**/.*",
     "node_modules",
     "bower_components",
     "test",
-    "tests"
+    "tests",
+    ".gitignore",
+    ".npmignore",
+    "gulpfile.js",
+    "lib",
+    "docs",
+    "index.js",
+    "umd.js",
+    "package.json",
+    "demo",
+    "index.html",
+    "build.json",
+    "bundle.json",
+    ".nvmrc",
+    ".eslintrc",
+    "bin",
+    "CHANGELOG.md",
+    "demos",
+    "stylesheets",
+    "_index.scss",
+    "bk"
   ],
   "dependencies": {
     "elliptical-utils": "~2.0.1",
