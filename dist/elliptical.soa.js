@@ -713,7 +713,7 @@
          *
          * @param {string} key
          * @param {object} value
-         * @param {object} params
+         * @param {object} [params]
          * @public
          */
         set: function (key,value,params) {
@@ -824,7 +824,7 @@
         /**
          * @param {string} key
          * @param {object} value
-         * @param {object} params - not used by this provider
+         * @param {object} [params]
          * @public
          */
         set: function (key, value, params) {
@@ -922,7 +922,7 @@
         /**
          * @param {string} key
          * @param {object} value
-         * @param {object} params - not used by this provider
+         * @param {object} [params]
          * @public
          */
         set: function (key, value, params) {
@@ -1024,7 +1024,7 @@
         /**
          * @param {string} key
          * @param {object} value
-         * @param {object} params - not used by this provider
+         * @param {object} [params]
          * @public
          */
         set: function (key, value, params) {
@@ -1402,6 +1402,7 @@
             var $provider = this.$provider;
             var cache = $provider.cache;
             if (typeof template === 'object') {
+                if(!template.name) return;
                 var ctrlName = template.name.toLowerCase();
                 var ctrlView = template.view.toLowerCase();
                 var ctrlTemplate = ctrlName + '.' + ctrlView;
@@ -1798,6 +1799,7 @@
             }
 
             function getQuerySearch(url) {
+                if(!url) return null;
                 var index = url.indexOf('?');
                 var length = url.length;
                 if (index > -1) return url.substring(index, length);
