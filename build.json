@@ -10,7 +10,7 @@
   "./lib/provider.session.js",
   "./lib/provider.memory.js",
   "./lib/provider.odata.js",
-  "/lib/provider.rest.js",
+  "./lib/provider.rest.js",
   "./lib/provider.pagination.js",
   "./lib/provider.sort.js",
   "./lib/provder.navigation.js",
