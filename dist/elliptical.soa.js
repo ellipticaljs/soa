@@ -1091,6 +1091,14 @@
  * =============================================================
  * elliptical.$OData
  * =============================================================
+ * for odata v4
+ * 
+ * supports common odata queries
+ * supports navigation,complex queries as pass throughs
+ * 
+ * e.g
+ *  can take a standard url query: ?c_Name=Book&cq_12=Filters/any(d:d/id eq 5)
+ *  and convert into odata format-->$filter=contains(Name%2C%27Book%27)%20and%20Filters%2Fany(d%3Ad%2FId%20eq%2012)&$top=12&$count=true
  */
 
 //umd pattern
@@ -1194,7 +1202,7 @@
             else {
                 page--;
                 skip = page * pageSize;
-                encodedPaginate = (skip > 0) ? '$skip=' + skip + '&$top=' + pageSize + '&$inlinecount=allpages' : '$top=' + pageSize + '&$inlinecount=allpages';
+                encodedPaginate = (skip > 0) ? '$skip=' + skip + '&$top=' + pageSize + '&$count=true' : '$top=' + pageSize + '&$count=true';
                 return (endpoint.indexOf('?') > -1) ? '&' + encodedPaginate : '?' + encodedPaginate;
             }
         },
@@ -1214,10 +1222,11 @@
              ewu_[field]==endswith,toupper
              eql_[field]==eq, tolower
              equ_[field]==eq,toupper
-
+             cq_[xxx] ==custom query; value passed as is
              examples: sw_Name=Bob ---> startswith(Name,'Bob')
              Name=Bob --> Name eq 'Bob'
              cl_Name=B ---> substringof(tolower(Name),tolower('B'))
+             cq_S=Styles/any(d:d/id eq 5)  --> $filter=Styles/any(d:d/id eq 5)
              */
             var str = '';
             var checksum = 0;
@@ -1239,15 +1248,15 @@
                         checksum++;
                     } else if (key.indexOf('c_') === 0) {
                         prop = key.substring(2);
-                        str += (checksum > 0) ? " and substringof(" + prop + ",'" + value + "')" : "substringof(" + prop + ",'" + value + "')";
+                        str += (checksum > 0) ? " and contains(" + prop + ",'" + value + "')" : "contains(" + prop + ",'" + value + "')";
                         checksum++;
                     } else if (key.indexOf('cl_') === 0) {
                         prop = key.substring(3);
-                        str += (checksum > 0) ? " and substringof(tolower(" + prop + "),tolower('" + value + "'))" : "substringof(tolower(" + prop + "),(tolower('" + value + "'))";
+                        str += (checksum > 0) ? " and contains(tolower(" + prop + "),tolower('" + value + "'))" : "contains(tolower(" + prop + "),(tolower('" + value + "'))";
                         checksum++;
                     } else if(key.indexOf('cu_')===0){
                         prop = key.substring(3);
-                        str += (checksum > 0) ? " and substringof(toupper(" + prop + "),toupper('" + value + "'))" : "substringof(toupper(" + prop + "),(toupper('" + value + "'))";
+                        str += (checksum > 0) ? " and contains(toupper(" + prop + "),toupper('" + value + "'))" : "contains(toupper(" + prop + "),(toupper('" + value + "'))";
                         checksum++;
                     } else if (key.indexOf('ew_') === 0) {
                         prop = key.substring(3);
@@ -1269,6 +1278,9 @@
                         prop = key.substring(4);
                         str += (checksum > 0) ? " and toupper(" + key + ") eq toupper('" + value + "')" : "toupper(" + key + ") eq toupper('" + value + "')";
                         checksum++;
+                    } else if(key.indexOf('cq_') ===0){
+                        str += (checksum > 0) ? " and " + value : value;
+                        checksum++;
                     } else if (key.indexOf('$') !== 0) {
                         str += (checksum > 0) ? " and " + key + " eq '" + value + "'" : key + " eq '" + value + "'";
                         checksum++;
@@ -1286,7 +1298,6 @@
 
 
 }));
-
 
 /*
  * =============================================================
