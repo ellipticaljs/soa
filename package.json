@@ -1,7 +1,7 @@
 {
   "name": "elliptical-soa",
   "description": "Elliptical Service Oriented Architecture",
-  "version": "1.0.17",
+  "version": "1.0.18",
   "author": "S. Francis",
   "license": "MIT",
   "repository": {
@@ -13,8 +13,6 @@
     "elliptical-class": "git+https://github.com/ellipticaljs/class.git",
     "elliptical-lodash": "git+https://github.com/ellipticaljs/lodash.git",
     "elliptical-http": "git+https://github.com/ellipticaljs/http.git",
-    "dustjs": "git+https://github.com/ellipticaljs/dustjs.git",
-    "elliptical-dust-helpers": "git+https://github.com/ellipticaljs/dust-helpers.git",
     "async": "^1.5.0"
   },
   "devDependencies": {
