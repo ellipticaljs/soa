@@ -1,7 +1,7 @@
 {
   "name": "elliptical-soa",
   "description": "Elliptical Service Oriented Architecture",
-  "version": "1.0.18",
+  "version": "1.0.20",
   "main": "dist/elliptical.soa.js",
   "authors": [
     "S. Francis"
@@ -47,6 +47,8 @@
     "elliptical-class": "~1.0.2",
     "elliptical-lodash": "~1.0.3",
     "async": "~1.5.0",
-    "elliptical-http": "~1.0.2"
+    "elliptical-http": "~1.0.2",
+    "elliptical-location": "~1.0.5",
+    "async-import": "~1.0.0"
   }
 }
