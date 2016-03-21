@@ -13,11 +13,6 @@
   "./lib/provider.rest.js",
   "./lib/provider.pagination.js",
   "./lib/provider.sort.js",
-  "./lib/provder.navigation.js",
   "./lib/services.js",
-  "./lib/services.js",
-  "./lib/services.js",
-  "./lib/services.js",
- "./lib/services.js",
-  "./lib/services.js"
+  "./lib/throttle.js"
 ]

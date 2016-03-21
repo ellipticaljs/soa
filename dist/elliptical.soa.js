@@ -1990,236 +1990,6 @@
 }));
 
 
-
-/*
- * =============================================================
- * elliptical.Notify
- * =============================================================
- */
-
-//umd pattern
-
-(function (root, factory) {
-    if (typeof module !== 'undefined' && module.exports) {
-        //commonjs
-        module.exports = factory(require('elliptical-class'));
-    } else if (typeof define === 'function' && define.amd) {
-        // AMD. Register as an anonymous module.
-        define(['elliptical-class'], factory);
-    } else {
-        // Browser globals (root is window)
-
-        root.elliptical.Notify=factory(root.elliptical.Class);
-        root.returnExports = root.elliptical.Notify;
-    }
-}(this, function (Class) {
-
-
-    var Notify=Class.extend({
-        '@resource':'Notify', //{String}
-        $provider:null,
-
-        /**
-         *
-         * @param {string} text
-         * @param {object} params
-         * @returns {*}
-         * @public
-         */
-        show:function(text,params){
-            return this.$provider.show(text,params);
-        },
-
-        /**
-         *
-         * @returns {*}
-         * @public
-         */
-        hide:function(){
-            return this.$provider.hide();
-        },
-
-        /**
-         *
-         * @returns {*}
-         * @public
-         */
-        visible:function(){
-            return this.$provider.visible();
-        },
-
-        /**
-         *
-         * @returns {*}
-         * @public
-         */
-        toggle:function(){
-            return this.$provider.toggle();
-        }
-
-    },{
-
-        /**
-         * @constructs
-         * @param {string} name
-         * @param {object} provider
-         */
-        init:function(name,provider){
-            var length = arguments.length;
-            if(length===1){
-                if(typeof name==='string') this.constructor["@resource"]=name;
-                else this.constructor.$provider=name;
-            }else if(length===2){
-                this.constructor["@resource"]=name;
-                this.constructor.$provider=provider;
-            }
-        },
-
-        /**
-         *
-         * @param {string} text
-         * @param {object} params
-         * @returns {*}
-         * @public
-         */
-        show:function(text,params){
-            return this.constructor.show(text,params);
-        },
-
-        /**
-         *
-         * @returns {*}
-         * @public
-         */
-        hide:function(){
-            return this.constructor.hide();
-        },
-
-        /**
-         *
-         * @returns {*}
-         * @public
-         */
-        visible:function(){
-            return this.constructor.visible();
-        },
-
-        /**
-         *
-         * @returns {*}
-         * @public
-         */
-        toggle:function(){
-            return this.constructor.toggle();
-        }
-    });
-
-    return Notify;
-
-
-
-}));
-
-
-/*
- * =============================================================
- * elliptical.Dialog
- * =============================================================
- */
-
-//umd pattern
-
-(function (root, factory) {
-    if (typeof module !== 'undefined' && module.exports) {
-        //commonjs
-        module.exports = factory(require('elliptical-class'));
-    } else if (typeof define === 'function' && define.amd) {
-        // AMD. Register as an anonymous module.
-        define(['elliptical-class'], factory);
-    } else {
-        // Browser globals (root is window)
-        root.elliptical.Dialog=factory(root.elliptical.Class);
-        root.returnExports = root.elliptical.Dialog;
-    }
-}(this, function (Class) {
-
-
-    var Dialog=Class.extend({
-        '@resource':'Dialog', //{String}
-        $provider:null,
-
-        /**
-         * @param {object} params
-         * @public
-         */
-        show:function(params){
-            return this.$provider.show(params);
-        },
-
-        /**
-         * @public
-         */
-        hide:function(){
-            return this.$provider.hide();
-        },
-
-        /**
-         * @param {object} params
-         */
-        setContent:function(params){
-            return this.$provider.setContent(params);
-        }
-
-    },{
-        /**
-         * @constructs
-         * @param {string} name
-         * @param {object} provider
-         */
-        init:function(name,provider){
-            var length = arguments.length;
-            if(length===1){
-                if(typeof name==='string') this.constructor["@resource"]=name;
-                else this.constructor.$provider=name;
-            }else if(length===2){
-                this.constructor["@resource"]=name;
-                this.constructor.$provider=provider;
-            }
-        },
-
-        /**
-         * @param {object} params
-         * @public
-         */
-        show:function(params){
-            return this.constructor.show(params);
-        },
-
-        /**
-         * @public
-         */
-        hide:function(){
-            return this.constructor.hide();
-        },
-
-        /**
-         * @param {object} params
-         */
-        setContent:function(params){
-            return this.constructor.setContent(params);
-        }
-
-    });
-
-    return Dialog;
-
-}));
-
-
-
-
-
-
 /*
  * =============================================================
  * elliptical.Store
@@ -2434,13 +2204,12 @@
 
         /**
          *
-         * @param {object} data
-         * @param {string} msg
+         * @param {object} params
          * @returns {*}
          * @public
          */
-        onError:function(data,msg){
-            return this.$provider.onError(data,msg);
+        onError:function(params){
+            return this.$provider.onError(params);
         }
 
 
@@ -2507,14 +2276,13 @@
 
         /**
          *
-         * @param {object} data
-         * @param {string} msg
+         * @param {object} params
          * @returns {*}
          * @public
          */
-        onError: function (data, msg) {
+        onError: function (params) {
             var $provider = (this.$provider) ? this.$provider : this.constructor.$provider;
-            return $provider.onError(data, msg);
+            return $provider.onError(params);
         }
 
     });
@@ -2712,5 +2480,43 @@
     });
 
     return Sort;
+
+}));
+
+/*
+ * =============================================================
+ * elliptical.throttle
+ * =============================================================
+ *
+ */
+
+//umd pattern
+
+(function (root, factory) {
+    if (typeof module !== 'undefined' && module.exports) {
+        //commonjs
+        module.exports = factory(require('elliptical-lodash').func);
+    } else if (typeof define === 'function' && define.amd) {
+        // AMD. Register as an anonymous module.
+        define(['elliptical-lodash'], factory);
+    } else {
+        // Browser globals (root is window)
+        root.elliptical.throttle=factory(root._.func);
+        root.returnExports = root.elliptical.throttle;
+    }
+}(this, function (_) {
+
+    if(_.func !==undefined) _=_.func;
+
+    return function throttle(fn,delay,opts){
+        if(typeof delay==='undefined'){
+            delay=1000;
+        }
+        if(typeof opts==='undefined'){
+            opts={};
+        }
+        _.throttle(fn,delay,opts);
+    }
+
 
 }));
