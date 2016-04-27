@@ -704,7 +704,6 @@
             try {
                 value = JSON.parse(value);
             } catch (ex) {
-                value=null;
             }
             return value;
         },
