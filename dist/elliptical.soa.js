@@ -1132,7 +1132,7 @@
                 var encodedFilter = '$filter=' + encodeURIComponent(filter);
                 return (endpoint.indexOf('?') > -1) ? '&' + encodedFilter : '?' + encodedFilter;
             }else return '';
-            
+
         },
 
         /**
@@ -1143,6 +1143,7 @@
          * @public
          */
         orderBy: function (endpoint, orderBy) {
+            if(orderBy.indexOf('.') > -1) orderBy=this._getNestedQueryProp(orderBy);
             var encodedOrderBy = '$orderby=' + encodeURIComponent(orderBy);
             return (endpoint.indexOf('?') > -1) ? '&' + encodedOrderBy : '?' + encodedOrderBy;
         },
@@ -1156,6 +1157,7 @@
          * @public
          */
         orderByDesc: function (endpoint, orderBy, orderByDesc) {
+            if(orderByDesc.indexOf('.') > -1) orderByDesc=this._getNestedQueryProp(orderByDesc);
             if (orderBy !== undefined) return ', ' + encodeURIComponent(orderByDesc + ' desc');
             else {
                 var encodedOrderByDesc = '$orderby=' + encodeURIComponent(orderByDesc + ' desc');
@@ -1207,6 +1209,11 @@
                 encodedPaginate = (skip > 0) ? '$skip=' + skip + '&$top=' + pageSize + '&$count=true' : '$top=' + pageSize + '&$count=true';
                 return (endpoint.indexOf('?') > -1) ? '&' + encodedPaginate : '?' + encodedPaginate;
             }
+        },
+
+        _getNestedQueryProp:function(nestedProp){
+            nestedProp=nestedProp.replace(/\./g,'/');
+            return nestedProp;
         },
 
         _getFilterString: function (query) {
@@ -1284,7 +1291,7 @@
                         str += (checksum > 0) ? " and " + value : value;
                         checksum++;
                     } else if(key.indexOf('search_')===0){
-                        var prop=key.substring(7);
+                        prop=key.substring(7);
                         var props=prop.split("_");
                         var search='';
                         //search_Name_Id=bob
@@ -1295,7 +1302,7 @@
                             search += "contains(tolower(" + _prop + "),tolower('" + value + "'))";
                         }
                         str += (checksum > 0) ? " and " + search : search;
-                        checksum++;   
+                        checksum++;
                     } else if ((key.indexOf('$') !== 0) && key.toLowerCase()!=='page') {
                         str += (checksum > 0) ? " and " + key + " eq '" + value + "'" : key + " eq '" + value + "'";
                         checksum++;
@@ -1399,7 +1406,10 @@
                 }
             }
 
-            if (q !== '') options.path += (resource.indexOf('/') === -1) ? '/' + q : q;
+            if (q !== '') {
+                if(resource) options.path += (resource.indexOf('/') === -1) ? '/' + q : q;
+                else options.path +=q;
+            }
 
             //test query options
             if (query && typeof query.filter !== 'undefined' && !object.isEmpty(query.filter)) {
@@ -1505,58 +1515,22 @@
          */
         _send: function (options, resource, callback) {
 
-            /* we asynchronously pass through to _onAuthenticate and _onSend(if a callback has been defined)
-             using the async waterfall pattern before passing off to http.
-             Note: _onAuthenticate should be implemented by extending the $Rest provider and overwriting the current
-             method which does nothing but pass through. You can also implement authentication by relying on the _onSend
-             callback, which does pass up the request object, if available.
+            /* we asynchronously pass through to onSend(if a callback has been defined)
+
              ex:
-             $myRestProvider.onSend=function(req, options, resource,callback){
+             $myRestProvider.onSend=function(options, resource,callback){
              options.authorization=http.encodeSessionToken(req.cookies.authToken);
              callback.call(this,null,options);
              };
-
-             pass the options object back as the data param in the callback
              */
-            var req = this.req || {};
-            var funcArray = [];
-            var onAuth = factory.partial(this._onAuthentication, options, resource).bind(this);
-            funcArray.push(onAuth);
-            if (typeof this.onSend === 'function') {
-                var onSendCallback = this.onSend;
-                var onSend = factory.partial(this._onSend, onSendCallback, req, resource).bind(this);
-                funcArray.push(onSend);
+
+            if(this.onSend) {
+                this.onSend(options,resource,function(err,data){
+                    if(err) callback(err,data);
+                    else http.send(data,callback);
+                });
             }
-            async.waterfall(funcArray, function (err, result) {
-                (err) ? callback(err, null) : http.send(result, callback);
-            });
-
-        },
-
-        /**
-         * set authorization/authentication on the request; implement by extending the $Rest provider and class
-         * and overwriting the method, returning options in the callback
-         * @param {object} options
-         * @param {string} resource
-         * @param {function} callback
-         * @private
-         */
-        _onAuthentication: function (options, resource, callback) {
-            if (callback) callback.call(this, null, options);
-        },
-
-
-        /**
-         * calls an onSend provided callback, if defined
-         * @param {function} fn
-         * @param {object} req
-         * @param {string} resource
-         * @param {object} options
-         * @param {function} callback
-         * @private
-         */
-        _onSend: function (fn, req, resource, options, callback) {
-            fn.call(this, req, options, resource, callback);
+            else http.send(options,callback);
         },
 
         /**
@@ -1573,7 +1547,8 @@
             options.port = this.port || this.constructor.port;
             options.method = method;
             options.path = this.path || this.constructor.path;
-            resource = (string.firstChar(resource) === '/') ? resource : '/' + resource;
+            if(resource) resource = (string.firstChar(resource) === '/') ? resource : '/' + resource;
+            else resource='';
             options.path = options.path + resource;
             options.protocol = this.protocol || this.constructor.protocol;
             options.withCredentials = this.withCredentials || this.constructor.withCredentials;
@@ -1589,8 +1564,6 @@
     return $Rest;
 
 }));
-
-
 
 /*
  * =============================================================
