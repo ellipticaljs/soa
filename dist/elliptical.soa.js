@@ -74,8 +74,9 @@
                             result = data;
                             self._data = data;
                         }
+
+                        result = self.onGet(result);
                     }
-                    result = self.onGet(result);
                     if (callback) callback(err, result);
                 });
             },
