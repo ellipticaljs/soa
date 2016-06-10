@@ -1,5 +1,4 @@
 [
-  "./lib/service.js",
   "./lib/provider.js",
   "./lib/factory.js",
   "./lib/noop.js",
