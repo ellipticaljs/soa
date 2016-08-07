@@ -1391,7 +1391,9 @@
                     pages: [],
                     beginRecord: null,
                     endRecord: null,
-                    count: count
+                    count: count,
+                    nextPageNo:null,
+                    prevPageNo:null
 
                 };
                 //assign pagination properties
@@ -1399,11 +1401,13 @@
                 if (page > 1) {
                     pagination.prevClass = '';
                     pagination.prevPage = assignUrl(baseUrl, parseInt(page - 1), querySearch,rawUrl,useQueryString);
+                    pagination.prevPageNo=page-1;
                 }
                 //next
                 if (page < pageCount) {
                     pagination.nextClass = '';
                     pagination.nextPage = assignUrl(baseUrl, parseInt(page + 1), querySearch,rawUrl,useQueryString);
+                    pagination.nextPageNo=page + 1;
                 }
 
                 //get page links
