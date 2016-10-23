@@ -843,6 +843,7 @@
          */
         filter: function (endpoint, filter) {
             if (typeof filter === 'object') filter = this._getFilterString(filter);
+            else filter=this._properCaseProp(filter);
             if(filter && filter !==''){
                 var encodedFilter = '$filter=' + encodeURIComponent(filter);
                 return (endpoint.indexOf('?') > -1) ? '&' + encodedFilter : '?' + encodedFilter;
@@ -859,6 +860,7 @@
          */
         orderBy: function (endpoint, orderBy) {
             if(orderBy.indexOf('.') > -1) orderBy=this._getNestedQueryProp(orderBy);
+            orderBy=this._properCaseProp(orderBy);
             var encodedOrderBy = '$orderby=' + encodeURIComponent(orderBy);
             return (endpoint.indexOf('?') > -1) ? '&' + encodedOrderBy : '?' + encodedOrderBy;
         },
@@ -873,6 +875,7 @@
          */
         orderByDesc: function (endpoint, orderBy, orderByDesc) {
             if(orderByDesc.indexOf('.') > -1) orderByDesc=this._getNestedQueryProp(orderByDesc);
+            orderByDesc=this._properCaseProp(orderByDesc);
             if (orderBy !== undefined) return ', ' + encodeURIComponent(orderByDesc + ' desc');
             else {
                 var encodedOrderByDesc = '$orderby=' + encodeURIComponent(orderByDesc + ' desc');
@@ -931,6 +934,10 @@
             return nestedProp;
         },
 
+        _properCaseProp:function(s){
+            return s.charAt(0).toUpperCase() + s.slice(1);
+        },
+
         _getFilterString: function (query) {
             /*
              default:[field] eq [value]
@@ -960,34 +967,42 @@
                     var value = decodeURIComponent(query[key]);
                     if (key.indexOf('sw_') === 0) {
                         prop = key.substring(3);
+                        prop=this._properCaseProp(prop);
                         str += (checksum > 0) ? " and startswith(" + prop + ",'" + value + "')" : "startswith(" + prop + ",'" + value + "')";
                         checksum++;
                     } else if (key.indexOf('swl_') === 0) {
                         prop = key.substring(4);
+                        prop=this._properCaseProp(prop);
                         str += (checksum > 0) ? " and startswith(tolower(" + prop + "),tolower('" + value + "'))" : "startswith(tolower(" + prop + "),tolower('" + value + "'))";
                         checksum++;
                     }else if(key.indexOf('swu_')===0){
                         prop = key.substring(4);
+                        prop=this._properCaseProp(prop);
                         str += (checksum > 0) ? " and startswith(toupper(" + prop + "),toupper('" + value + "'))" : "startswith(toupper(" + prop + "),toupper('" + value + "'))";
                         checksum++;
                     } else if (key.indexOf('c_') === 0) {
                         prop = key.substring(2);
+                        prop=this._properCaseProp(prop);
                         str += (checksum > 0) ? " and contains(" + prop + ",'" + value + "')" : "contains(" + prop + ",'" + value + "')";
                         checksum++;
                     } else if (key.indexOf('cl_') === 0) {
                         prop = key.substring(3);
+                        prop=this._properCaseProp(prop);
                         str += (checksum > 0) ? " and contains(tolower(" + prop + "),tolower('" + value + "'))" : "contains(tolower(" + prop + "),(tolower('" + value + "'))";
                         checksum++;
                     } else if(key.indexOf('cu_')===0){
                         prop = key.substring(3);
+                        prop=this._properCaseProp(prop);
                         str += (checksum > 0) ? " and contains(toupper(" + prop + "),toupper('" + value + "'))" : "contains(toupper(" + prop + "),(toupper('" + value + "'))";
                         checksum++;
                     } else if (key.indexOf('ew_') === 0) {
                         prop = key.substring(3);
+                        prop=this._properCaseProp(prop);
                         str += (checksum > 0) ? " and endswith(" + prop + ",'" + value + "')" : "endswith(" + prop + ",'" + value + "')";
                         checksum++;
                     }else if (key.indexOf('ewl_')===0){
                         prop = key.substring(4);
+                        prop=this._properCaseProp(prop);
                         str += (checksum > 0) ? " and endswith(tolower(" + prop + "),tolower('" + value + "'))" : "endswith(tolower(" + prop + "),tolower('" + value + "'))";
                         checksum++;
                     }else if(key.indexOf('ewu_')===0){
@@ -996,10 +1011,12 @@
                         checksum++;
                     } else if (key.indexOf('eql_') === 0) {
                         prop = key.substring(4);
+                        prop=this._properCaseProp(prop);
                         str += (checksum > 0) ? " and tolower(" + key + ") eq tolower('" + value + "')" : "tolower(" + key + ") eq tolower('" + value + "')";
                         checksum++;
                     }else if(key.indexOf('equ_')===0){
                         prop = key.substring(4);
+                        prop=this._properCaseProp(prop);
                         str += (checksum > 0) ? " and toupper(" + key + ") eq toupper('" + value + "')" : "toupper(" + key + ") eq toupper('" + value + "')";
                         checksum++;
                     } else if(key.indexOf('cq_') ===0){
@@ -1007,10 +1024,9 @@
                         checksum++;
                     } else if(key.indexOf('search_')===0){
                         prop=key.substring(7);
+                        prop=this._properCaseProp(prop);
                         var props=prop.split("_");
                         var search='';
-                        //search_Name_Id=bob
-                        //Name=bob_Id=11
                         for(var i=0;i<props.length;i++){
                             var _prop=props[i];
                             if(i>0) search += " or ";
@@ -1019,7 +1035,9 @@
                         str += (checksum > 0) ? " and " + search : search;
                         checksum++;
                     } else if ((key.indexOf('$') !== 0) && key.toLowerCase()!=='page') {
-                        str += (checksum > 0) ? " and " + key + " eq '" + value + "'" : key + " eq '" + value + "'";
+                        prop=key;
+                        prop=this._properCaseProp(prop);
+                        str += (checksum > 0) ? " and " + prop + " eq '" + value + "'" : prop + " eq '" + value + "'";
                         checksum++;
                     }
 
