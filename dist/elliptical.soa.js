@@ -920,7 +920,7 @@
                 skip,
                 encodedPaginate;
 
-            if (typeof page === 'undefined' || typeof pageSize === 'undefined') return endpoint;
+            if (typeof page === 'undefined' || typeof pageSize === 'undefined') return '';
             else {
                 page--;
                 skip = page * pageSize;
