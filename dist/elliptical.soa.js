@@ -843,7 +843,7 @@
          */
         filter: function (endpoint, filter) {
             if (typeof filter === 'object') filter = this._getFilterString(filter);
-            else filter=this._properCaseProp(filter);
+            //else filter=this._properCaseProp(filter);
             if(filter && filter !==''){
                 var encodedFilter = '$filter=' + encodeURIComponent(filter);
                 return (endpoint.indexOf('?') > -1) ? '&' + encodedFilter : '?' + encodedFilter;
