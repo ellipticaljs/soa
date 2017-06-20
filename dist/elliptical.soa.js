@@ -1090,6 +1090,7 @@
         $queryProvider: $OData,
         onSend: null,
         withCredentials: false,
+        excludeResourceFromPath:false,
 
         /**
          * @constructs
@@ -1107,7 +1108,7 @@
             this.protocol = opts.protocol || this.constructor.protocol;
             this.protocol = this.protocol || 'http';
             this.withCredentials = opts.withCredentials || this.constructor.withCredentials;
-
+            this.excludeResourceFromPath = opts.excludeResourceFromPath || this.constructor.excludeResourceFromPath;
             if ($queryProvider !== undefined) this.$queryProvider = $queryProvider;
         },
 
@@ -1121,6 +1122,7 @@
          * @public
          */
         get: function (params, resource, query, callback) {
+            if(this.excludeResourceFromPath) resource=null;
             if (typeof query === 'function') callback = query;
 
             var options = this._getOptions(resource, 'GET', undefined);
@@ -1178,6 +1180,7 @@
          * @public
          */
         post: function (params, resource, callback) {
+            if(this.excludeResourceFromPath) resource=null;
             var options = this._getOptions(resource, 'POST', params);
             this._send(options, resource, callback);
         },
@@ -1192,6 +1195,7 @@
          * @public
          */
         put: function (params, resource, callback) {
+            if(this.excludeResourceFromPath) resource=null;
             var options = this._getOptions(resource, 'PUT', params);
             this._send(options, resource, callback);
         },
@@ -1217,6 +1221,7 @@
          * @private
          */
         _delete: function (params, resource, callback) {
+            if(this.excludeResourceFromPath) resource=null;
             var options = this._getOptions(resource, 'DELETE', undefined);
             var q = '';
             var i = 0;
