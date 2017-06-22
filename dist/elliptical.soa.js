@@ -1129,9 +1129,13 @@
 
             var q = '';
             var i = 0;
+            var _VAL=null;
+            var _LENGTH=0;
             for (var key in params) {
                 if (params.hasOwnProperty(key)) {
+                    _LENGTH+=1;
                     var val = encodeURIComponent(params[key]);
+                    _VAL=val;
                     if (i === 0) {
                         q += '?' + key + '=' + val;
                         i++;
@@ -1141,9 +1145,13 @@
                 }
             }
 
-            if (q !== '') {
-                if(resource) options.path += (resource.indexOf('/') === -1) ? '/' + q : q;
-                else options.path +=q;
+            //if params, length > 1, append key,values as queries to path endpoint
+            if (_LENGTH>1) {
+              if(resource) options.path += (resource.indexOf('/') === -1) ? '/' + q : q;
+              else options.path +=q;
+            }else if(_LENGTH===1){ //else, length==1, append value to path
+              if(resource) options.path += (resource.indexOf('/') === -1) ? '/' + _VAL : _VAL;
+              else options.path +=_VAL;
             }
 
             //test query options
