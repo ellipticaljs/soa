@@ -1229,26 +1229,36 @@
          * @private
          */
         _delete: function (params, resource, callback) {
-            if(this.excludeResourceFromPath) resource=null;
-            var options = this._getOptions(resource, 'DELETE', undefined);
-            var q = '';
-            var i = 0;
-            for (var key in params) {
-                if (params.hasOwnProperty(key)) {
-                    var val = encodeURIComponent(params[key]);
-                    if (i === 0) {
-                        q += '?' + key + '=' + val;
-                        i++;
-                    } else {
-                        q += '&' + key + '=' + val;
-                    }
-                }
+          if(this.excludeResourceFromPath) resource=null;
+          var options = this._getOptions(resource, 'DELETE', undefined);
+          var q = '';
+          var i = 0;
+          var _VAL=null;
+          var _LENGTH=0;
+          for (var key in params) {
+            if (params.hasOwnProperty(key)) {
+              var val = encodeURIComponent(params[key]);
+              _LENGTH+=1;
+              _VAL=val;
+              if (i === 0) {
+                q += '?' + key + '=' + val;
+                i++;
+              } else {
+                q += '&' + key + '=' + val;
+              }
             }
+          }
 
-            if (q != '') options.path += '/' + q;
+          if (_LENGTH>1) {
+            if(resource) options.path += (resource.indexOf('/') === -1) ? '/' + q : q;
+            else options.path +=q;
+          }else if(_LENGTH===1){ //else, length==1, append value to path
+            if(resource) options.path += (resource.indexOf('/') === -1) ? '/' + _VAL : _VAL;
+            else options.path +=_VAL;
+          }
 
-            //send
-            this._send(options, resource, callback);
+          //send
+          this._send(options, resource, callback);
         },
 
 
